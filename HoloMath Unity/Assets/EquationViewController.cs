@@ -14,6 +14,7 @@ public class EquationViewController : MonoBehaviour
     protected Term startTerm;
 
     protected List<Token> tokens;
+    protected List<Token> tempTokens;
 
     [ContextMenu("Expand")]
     public void ExpandTerm()
