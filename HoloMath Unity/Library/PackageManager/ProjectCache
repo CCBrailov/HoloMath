@@ -5,16 +5,16 @@ m_ProjectFiles:
     m_ContentTrackingEnabled: 1
     m_ModificationDate:
       serializedVersion: 2
-      ticks: 637919630795113163
-    m_Hash: 2524645620
+      ticks: 637920209754028772
+    m_Hash: 378034925
   m_LockFileStatus:
     m_FilePath: C:/Users/cb3/Documents/HoloMath/HoloMath Unity/Packages/packages-lock.json
     m_PathExists: 1
     m_ContentTrackingEnabled: 1
     m_ModificationDate:
       serializedVersion: 2
-      ticks: 637919630965541382
-    m_Hash: 2967833652
+      ticks: 637920209754038772
+    m_Hash: 3067516682
 m_EmbeddedPackageManifests:
   m_ManifestsStatus: {}
 m_LocalPackages:
@@ -93,7 +93,6 @@ m_ResolvedPackages:
     - 1.15.17
     - 1.15.18
     - 1.17.0
-    - 1.17.1
     - 2.0.0-preview.6
     - 2.0.0-preview.8
     - 2.0.0-preview.15
@@ -109,7 +108,6 @@ m_ResolvedPackages:
     - 1.15.17
     - 1.15.18
     - 1.17.0
-    - 1.17.1
     - 2.0.0-preview.6
     - 2.0.0-preview.8
     - 2.0.0-preview.15
