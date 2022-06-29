@@ -7,6 +7,7 @@ public class Token
     public string displayString;
     public Expression expression;
 
+    [ContextMenu("Expand")]
     public void Expand()
     {
         OnExpand();
@@ -17,6 +18,7 @@ public class Token
         
     }
 
+    [ContextMenu("Simplify")]
     public void Simplify()
     {
         OnSimplify();

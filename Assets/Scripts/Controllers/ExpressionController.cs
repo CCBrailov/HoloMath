@@ -8,7 +8,7 @@ public class ExpressionController : MonoBehaviour
     public Expression expression;
     public List<TokenController> tokenControllers;
 
-    public GameObject tokenObject;
+    public GameObject tokenPrefab;
 
     public void BuildTokenControllers()
     {
@@ -16,8 +16,8 @@ public class ExpressionController : MonoBehaviour
         foreach (Token t in expression.tokens)
         {
             Vector3 position = new(expression.tokens.IndexOf(t) * 3, 0, 0);
-            GameObject tokenView = Instantiate(tokenObject, position, Quaternion.identity, this.transform);
-            TokenController controller = (TokenController)tokenView.GetComponent("TokenViewController");
+            GameObject tokenObject = Instantiate(tokenPrefab, position, Quaternion.identity, this.transform);
+            TokenController controller = tokenObject.GetComponent<TokenController>();
             controller.token = t;
             controller.expressionController = this;
             tokenControllers.Add(controller);

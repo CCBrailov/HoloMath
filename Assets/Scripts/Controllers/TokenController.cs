@@ -9,7 +9,6 @@ public class TokenController : MonoBehaviour
     public TextMeshPro textMesh;
     public ExpressionController expressionController;
 
-    [ContextMenu("Expand")]
     public void Expand()
     {
         token.Expand();
