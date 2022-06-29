@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class Token
 {
-
+    public string displayString;
+    public Equation equation;
     public virtual List<Token> Expand()
     {
         return null;

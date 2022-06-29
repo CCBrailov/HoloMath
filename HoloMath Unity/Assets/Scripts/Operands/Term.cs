@@ -7,33 +7,53 @@ public class Term : Token
 
     public float coeff;
     public char variable;
-    public string displayString;
 
-    public Term(float i)
+    protected bool simple;
+
+    public Term(Equation eq, float i)
     {
+        equation = eq;
         coeff = i;
         displayString = i.ToString();
+        simple = true;
     }
 
-    public Term(char v)
+    public Term(Equation eq, char v)
     {
+        equation = eq;
         variable = v;
         displayString = v.ToString();
+        simple = true;
     }
 
-    public Term(float i, char v)
+    public Term(Equation eq, float i, char v)
     {
+        equation = eq;
         coeff = i;
         variable = v;
         displayString = i.ToString() + v.ToString();
+        simple = false;
     }
 
-    public override List<Token> Expand() 
+    public override List<Token> Expand()
     {
         List<Token> returnList = new List<Token>();
-        returnList.Add(new Term(coeff));
-        returnList.Add(new Multiplication());
-        returnList.Add(new Term(variable));
+        if (!simple)
+        {
+            returnList.Add(new Term(equation, coeff));
+            returnList.Add(new Multiplication(equation));
+            returnList.Add(new Term(equation, variable));
+        }
+        else
+        {
+            returnList.Add(this);
+        }
+        int index = equation.leftSide.IndexOf(this);
+        equation.leftSide.Remove(this);
+        foreach(Token t in returnList)
+        {
+            equation.leftSide.Insert(index, t);
+        }
         return returnList;
     }
 }

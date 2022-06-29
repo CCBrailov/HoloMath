@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class Multiplication : Operator
 {
-    public string displayString = "*";
 
-    public Multiplication()
+    public Multiplication(Equation eq)
     {
-
+        displayString = "*";
+        equation = eq;
     }
 }
