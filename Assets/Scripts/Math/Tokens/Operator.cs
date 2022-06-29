@@ -7,7 +7,7 @@ public class Operator : Token
     protected Token leftToken;
     protected Token rightToken;
 
-    protected void LoadOperands()
+    protected void LoadOperandTokens()
     {
         int index = expression.tokens.IndexOf(this);
         leftToken = expression.tokens[index - 1];

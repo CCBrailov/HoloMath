@@ -9,11 +9,19 @@ public class TokenController : MonoBehaviour
     public TextMeshPro textMesh;
     public ExpressionController expressionController;
 
+    [ContextMenu("Expand")]
     public void Expand()
     {
         token.Expand();
         expressionController.BuildTokenControllers();
         Destroy(gameObject);
+    }
+
+    [ContextMenu("Simplify")]
+    public void Simplify()
+    {
+        token.Simplify();
+        expressionController.BuildTokenControllers();
     }
 
     void Start()

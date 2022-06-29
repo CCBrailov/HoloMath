@@ -5,54 +5,152 @@ using UnityEngine;
 public class Term : Token
 {
 
-    public float coeff;
-    public char variable;
+    public float coeff = 1;
+    public string variable = "";
+
+    public bool hasKnownValue = false;
+    public float knownValue;
 
     protected bool simple;
 
-    public Term(Expression ex, float i)
+    public Term(Expression ex, float f)
     {
         expression = ex;
-        coeff = i;
-        displayString = i.ToString();
+        coeff = f;
+        SetKnownValue(f);
+        //displayString = i.ToString();
+        BuildDisplayString();
         simple = true;
     }
 
-    public Term(Expression ex, char v)
+    public Term(Expression ex, string v)
     {
         expression = ex;
         variable = v;
-        displayString = v.ToString();
+        //displayString = v.ToString();
+        BuildDisplayString();
         simple = true;
     }
 
-    public Term(Expression ex, float i, char v)
+    public Term(Expression ex, float f, string v)
     {
         expression = ex;
-        coeff = i;
+        coeff = f;
         variable = v;
-        displayString = i.ToString() + v.ToString();
+        //displayString = i.ToString() + v.ToString();
+        BuildDisplayString();
         simple = false;
+    }
+
+    public void BuildDisplayString()
+    {
+        displayString = "";
+        if(variable.Equals(""))
+        {
+            displayString = coeff.ToString();
+        } 
+        else if(coeff == 1) 
+        {
+            displayString = variable.ToString();
+        } 
+        else
+        {
+            displayString = coeff.ToString() + variable.ToString();
+        }
+    }
+
+    protected void SetKnownValue(float f)
+    {
+        hasKnownValue = true;
+        knownValue = f;
     }
 
     protected override void OnExpand()
     {
-        List<Token> returnList = new List<Token>();
+        List<Token> newTokens = new List<Token>();
         if (!simple)
         {
-            returnList.Add(new Term(expression, coeff));
-            returnList.Add(new Multiplication(expression));
-            returnList.Add(new Term(expression, variable));
+            newTokens.Add(new Term(expression, coeff));
+            newTokens.Add(new Multiplication(expression));
+            newTokens.Add(new Term(expression, variable));
         }
         else
         {
-            returnList.Add(this);
+            newTokens = FactorizeToken();
         }
         int index = expression.tokens.IndexOf(this);
         expression.tokens.Remove(this);
-        foreach (Token t in returnList)
+        foreach (Token t in newTokens)
         {
-            expression.tokens.Insert(index + returnList.IndexOf(t), t);
+            expression.tokens.Insert(index + newTokens.IndexOf(t), t);
         }
+    }
+
+    protected override void OnSimplify()
+    {
+
+    }
+
+
+    // If this Term is a constant (i.e. 12), factor the constant and return new Terms and Operators (i.e. 2 * 2 * 3)
+    // If this Term is not a constant, return the term unchanged
+    protected List<Token> FactorizeToken()
+    {
+        List<Token> newTokens = new List<Token>();
+
+        // If this token has no known value, or if it is a non-integer constant, 
+        if (!hasKnownValue || Mathf.Floor(coeff) != coeff) 
+        {
+            newTokens.Add(this);
+            return newTokens;
+        }
+
+        List<float> factors = FactorizeInteger((int)coeff);
+        foreach (float f in factors)
+        {
+            newTokens.Add(new Term(expression, f));
+            newTokens.Add(new Multiplication(expression));
+        }
+        newTokens.RemoveAt(newTokens.Count - 1);
+
+        return newTokens;
+    }
+
+    protected void ReplaceTokens(List<Token> newTokens)
+    {
+        int index = expression.tokens.IndexOf(this);
+        expression.tokens.Remove(this);
+        foreach (Token t in newTokens)
+        {
+            expression.tokens.Insert(index + newTokens.IndexOf(t), t);
+        }
+    }
+    // Takes in integer, returns factorized integer as list of floats
+    // Source: https://www.geeksforgeeks.org/print-all-prime-factors-of-a-given-number/
+    private List<float> FactorizeInteger(int n)
+    {
+        List<float> factors = new List<float>();
+
+        while (n % 2 == 0)
+        {
+            factors.Add(2);
+            n /= 2;
+        }
+
+        for (int i = 3; i <= Mathf.Sqrt((float)n); i += 2)
+        {
+            while(n % i == 0)
+            {
+                factors.Add(i);
+                n /= i;
+            }
+        }
+
+        if (n > 2)
+        {
+            factors.Add(n);
+        }
+
+        return factors;
     }
 }
