@@ -26,29 +26,25 @@ public class ClickHandler : MonoBehaviour
         }
 
         // Ctrl + Left Mouse Button
+        // EMPTY
         if (Input.GetKey(KeyCode.LeftControl) & Input.GetMouseButtonDown(0))
         {
-            OnCtrlLeftClick(tokenController);
-            return;
+
         }
 
         // Ctrl + Right Mouse Button
+        // EMPTY
         if (Input.GetKey(KeyCode.LeftControl) & Input.GetMouseButtonDown(1))
         {
-            OnCtrlRightClick(tokenController);
-            return;
+
         }
 
-        if (Input.GetMouseButtonDown(0))
+        // Middle Mouse Button
+        // Expand and simplify (only one should be possible)
+        if (Input.GetMouseButtonDown(2))
         {
-            OnLeftClick(tokenController);
-            return;
-        }
-
-        if (Input.GetMouseButton(0))
-        {
-            OnLeftDrag(heldTokenController);
-            return;
+            Simplify(tokenController);
+            Expand(tokenController);
         }
     }
 
@@ -63,31 +59,16 @@ public class ClickHandler : MonoBehaviour
         return token;
     }
 
-    private void OnCtrlLeftClick(TokenController tc)
+    private void Simplify(TokenController tc)
     {
-        if (Input.GetKey(KeyCode.LeftControl) & Input.GetMouseButtonDown(0))
-        {
-            Debug.Log("Simplifying " + tc.gameObject.name);
-            tc.Simplify();
-        }
+        Debug.Log("Simplifying " + tc.gameObject.name);
+        tc.Simplify();
     }
 
-    private void OnCtrlRightClick(TokenController tc)
+    private void Expand(TokenController tc)
     {
         Debug.Log("Expanding " + tc.gameObject.name);
         tc.Expand();
     }
-
-    private void OnLeftClick(TokenController tc)
-    {
-        //tc.expressionController.tokenControllers.Remove(tc);
-        heldTokenController = tc;
-    }
-
-    private void OnLeftDrag(TokenController tc)
-    {
-        tc.transform.position = Input.mousePosition;
-    }
-
   
 }
