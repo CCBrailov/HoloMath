@@ -8,7 +8,7 @@ public class TokenController : MonoBehaviour
     public Token token;
     public TextMeshPro textMesh;
     public ExpressionController expressionController;
-    public SphereCollider sphereCollider;
+    public BoxCollider boxCollider;
 
     [ContextMenu("Expand")]
     public void Expand()
@@ -27,14 +27,13 @@ public class TokenController : MonoBehaviour
 
     void Start()
     {
-        Collider collider = GetComponent<Collider>();
     }
 
     // Update is called once per frame
     void Update()
     {
         textMesh.SetText(token.displayString);
-        sphereCollider.radius = textMesh.bounds.extents.x;
+        boxCollider.size = new Vector3(textMesh.bounds.size.x, textMesh.bounds.size.y, 1);
         gameObject.name = token.displayString;
     }
 }

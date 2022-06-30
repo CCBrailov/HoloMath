@@ -183,7 +183,7 @@ GameObject:
   - component: {fileID: 3366394710074322229}
   - component: {fileID: 4492014971176645450}
   - component: {fileID: 8929659485258273140}
-  - component: {fileID: 5431985855235707420}
+  - component: {fileID: 1179853828529024536}
   m_Layer: 0
   m_Name: TokenObject
   m_TagString: Untagged
@@ -221,7 +221,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   textMesh: {fileID: 9001818576320689823}
   expressionController: {fileID: 0}
-  sphereCollider: {fileID: 5431985855235707420}
+  boxCollider: {fileID: 1179853828529024536}
 --- !u!114 &8929659485258273140
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -235,8 +235,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tokenController: {fileID: 4492014971176645450}
---- !u!135 &5431985855235707420
-SphereCollider:
+--- !u!65 &1179853828529024536
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -246,5 +246,5 @@ SphereCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 2
+  m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
