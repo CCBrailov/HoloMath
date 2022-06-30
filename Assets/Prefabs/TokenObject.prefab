@@ -234,7 +234,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a05d681fb4c768a4397d708cf6e3c1c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tokenController: {fileID: 4492014971176645450}
 --- !u!65 &1179853828529024536
 BoxCollider:
   m_ObjectHideFlags: 0
