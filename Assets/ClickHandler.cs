@@ -7,7 +7,8 @@ public class ClickHandler : MonoBehaviour
 {
     public Camera mainCamera;
     private RaycastHit raycastHit;
-    private TokenController heldTokenController;
+    private TokenController originalTokenController = null;
+    private TokenController heldTokenController = null;
 
     // Start is called before the first frame update
     void Start()
@@ -25,20 +26,6 @@ public class ClickHandler : MonoBehaviour
             return;
         }
 
-        // Ctrl + Left Mouse Button
-        // EMPTY
-        if (Input.GetKey(KeyCode.LeftControl) & Input.GetMouseButtonDown(0))
-        {
-
-        }
-
-        // Ctrl + Right Mouse Button
-        // EMPTY
-        if (Input.GetKey(KeyCode.LeftControl) & Input.GetMouseButtonDown(1))
-        {
-
-        }
-
         // Middle Mouse Button
         // Expand and simplify (only one should be possible)
         if (Input.GetMouseButtonDown(2))
@@ -46,6 +33,40 @@ public class ClickHandler : MonoBehaviour
             Simplify(tokenController);
             Expand(tokenController);
         }
+
+        if (Input.GetMouseButtonDown(0))
+        {
+            if(!(tokenController.token is Term))
+            {
+                return;
+            }
+            originalTokenController = tokenController;
+            heldTokenController = Instantiate(tokenController, tokenController.transform.position, Quaternion.identity, tokenController.transform.parent);
+            heldTokenController.token = tokenController.token;
+            originalTokenController.Hide();
+            originalTokenController.expressionController.AddParentheses();
+            originalTokenController.expressionController.BuildTokenControllers();
+
+        }
+
+        if (Input.GetMouseButton(0))
+        {
+            if (heldTokenController != null)
+            {
+                heldTokenController.transform.position = mainCamera.ScreenToWorldPoint(Input.mousePosition) + new Vector3(0, 0, 1);
+            }
+
+        }
+
+        if (Input.GetMouseButtonUp(0))
+        {
+            originalTokenController.expressionController.RemoveParentheses();
+            originalTokenController.Show();
+            Destroy(heldTokenController.gameObject);
+            heldTokenController = null;
+            originalTokenController = null;
+        }
+
     }
 
     private TokenController GetTokenFromMouse()

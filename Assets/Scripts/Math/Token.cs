@@ -7,6 +7,7 @@ public class Token
 {
     public string displayString;
     public Expression expression;
+    public bool visible = true;
 
     public void Expand()
     {

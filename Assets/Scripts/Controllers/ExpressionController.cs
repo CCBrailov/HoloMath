@@ -25,6 +25,61 @@ public class ExpressionController : MonoBehaviour
         PositionTokenControllers();
     }
 
+    [ContextMenu("Add Parentheses")]
+    public void AddParentheses()
+    {
+        int firstMultiplication = -1;
+        int finalMultiplication = -1;
+
+        for (int i = 0; i < tokenControllers.Count; i++)
+        {
+            if (tokenControllers[i].token is Multiplication)
+            {
+                firstMultiplication = i;
+                break;
+            }
+        }
+
+        if (firstMultiplication == -1)
+        {
+            return;
+        }
+
+        expression.tokens.Insert(firstMultiplication - 1, new CustomToken(expression, "("));
+        
+        for (int i = firstMultiplication; i < tokenControllers.Count; i++)
+        {
+            Token token = tokenControllers[i].token;
+            if (token is Operator & !(token is Multiplication))
+            {
+                finalMultiplication = i;
+                break;
+            }
+        }
+
+        if (finalMultiplication == -1)
+        {
+            expression.tokens.Add(new CustomToken(expression, ")"));
+        }
+        else
+        {
+            expression.tokens.Insert(finalMultiplication + 1, new CustomToken(expression, ")"));
+        }
+        BuildTokenControllers();
+    }
+
+    public void RemoveParentheses()
+    {
+        foreach(TokenController t in tokenControllers)
+        {
+            if(t.token is CustomToken)
+            {
+                expression.tokens.Remove(t.token);
+            }
+        }
+        BuildTokenControllers();
+    }
+
     protected void PositionTokenControllers()
     {
         float expressionWidth = 0;
