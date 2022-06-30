@@ -37,7 +37,9 @@ public class Multiplication : Operator
         }
 
         int index = expression.tokens.IndexOf(this.leftToken);
-        expression.tokens.RemoveAll(t => t == leftToken || t == this || t == rightToken);
+        expression.tokens.Remove(leftToken);
+        expression.tokens.Remove(this);
+        expression.tokens.Remove(rightToken);
         expression.tokens.Insert(index, newToken);
     }
 }

@@ -10,7 +10,7 @@ public class Expression
 
     public Expression()
     {
-        Test1();
+        Test4();
     }
 
 
@@ -50,6 +50,18 @@ public class Expression
             new Term(this, 3),
             new Multiplication(this),
             new Term(this, 4, "x")
+        };
+    }
+
+    // Test Expression 4
+    // 3 + 4 + x
+    protected void Test4()
+    {
+        tokens = new List<Token>
+        {
+            new Term(this, 3),
+            new Addition(this),
+            new Term(this, 4)
         };
     }
 }
