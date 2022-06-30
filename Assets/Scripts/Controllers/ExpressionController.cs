@@ -15,7 +15,10 @@ public class ExpressionController : MonoBehaviour
         DestroyTokenControllers();
         foreach (Token t in expression.tokens)
         {
-            Vector3 position = new(expression.tokens.IndexOf(t) * 3, 0, 0);
+            Vector3 position = new(
+                gameObject.transform.position.x + (expression.tokens.IndexOf(t) * 3), 
+                gameObject.transform.position.y, 
+                gameObject.transform.position.z);
             GameObject tokenObject = Instantiate(tokenPrefab, position, Quaternion.identity, this.transform);
             TokenController controller = tokenObject.GetComponent<TokenController>();
             controller.token = t;
@@ -28,7 +31,10 @@ public class ExpressionController : MonoBehaviour
     {
         foreach (TokenController t in tokenControllers)
         {
-            Vector3 position = new(tokenControllers.IndexOf(t) * 3, 0, 0);
+            Vector3 position = new(
+                gameObject.transform.position.x + (tokenControllers.IndexOf(t) * 3),
+                gameObject.transform.position.y,
+                gameObject.transform.position.z);
             t.gameObject.transform.position = position;
         }
     }

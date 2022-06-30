@@ -61,7 +61,9 @@ public class Expression
         {
             new Term(this, 3),
             new Addition(this),
-            new Term(this, 4)
+            new Term(this, 4),
+            new Addition(this),
+            new Term(this, "x")
         };
     }
 }
