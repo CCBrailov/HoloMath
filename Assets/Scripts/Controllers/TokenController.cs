@@ -29,11 +29,13 @@ public class TokenController : MonoBehaviour
 
     public void Hide()
     {
+        //token.Hide();
         visible = false;
     }
 
     public void Show()
     {
+        //token.Show();
         visible = true;
     }
 
@@ -52,7 +54,6 @@ public class TokenController : MonoBehaviour
 
     void Start()
     {
-        Show();
         Draw();
     }
 

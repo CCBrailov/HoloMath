@@ -19,6 +19,16 @@ public class Token
         OnSimplify();
     }
 
+    public void Hide()
+    {
+        visible = false;
+    }
+    
+    public void Show()
+    {
+        visible = true;
+    }
+
     protected virtual void OnExpand()
     {
 
