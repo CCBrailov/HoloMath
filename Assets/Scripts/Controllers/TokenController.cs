@@ -9,6 +9,8 @@ public class TokenController : MonoBehaviour
     public TextMeshPro textMesh;
     public ExpressionController expressionController;
     public BoxCollider boxCollider;
+    public CapsuleCollider leftHandleCollider;
+    public CapsuleCollider rightHandleCollider;
 
     public bool visible = true;
 
@@ -62,6 +64,10 @@ public class TokenController : MonoBehaviour
     {
         Draw();
         boxCollider.size = new Vector3(textMesh.bounds.size.x, textMesh.bounds.size.y, 1);
+        leftHandleCollider.center = new(-textMesh.bounds.extents.x, 0, 0);
+        rightHandleCollider.center = new(textMesh.bounds.extents.x, 0, 0);
+        leftHandleCollider.height = textMesh.bounds.size.y;
+        rightHandleCollider.height = textMesh.bounds.size.y;
         gameObject.name = token.displayString;
     }
 }
