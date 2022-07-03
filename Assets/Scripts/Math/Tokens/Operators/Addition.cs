@@ -18,7 +18,7 @@ public class Addition : Operator
             Term rightTerm = (Term)rightToken;
 
             float coeff = leftTerm.coeff + rightTerm.coeff;
-            Token newToken = new Term(expression, coeff);
+            Token newToken = new Term(expression, coeff, leftTerm.variable);
 
             int index = expression.tokens.IndexOf(this.leftToken);
             expression.tokens.Remove(leftToken);
@@ -42,6 +42,10 @@ public class Addition : Operator
             Term rightTerm = (Term)rightToken;
 
             if (leftTerm.hasKnownValue & rightTerm.hasKnownValue)
+            {
+                canOperate = true;
+            }
+            else if (leftTerm.variable.Equals(rightTerm.variable))
             {
                 canOperate = true;
             }

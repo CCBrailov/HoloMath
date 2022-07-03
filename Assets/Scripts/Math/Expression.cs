@@ -16,6 +16,12 @@ public class Expression
         Test5();
     }
 
+    public Expression(ExpressionController c, List<Token> t)
+    {
+        controller = c;
+        tokens = t;
+    }
+
     public List<List<int>> LawfulPlacements(Token t)
     {
         if (!parenthetized)
@@ -29,24 +35,38 @@ public class Expression
 
         ranges.Add(new List<int>());
 
+        bool allowed = true;
+
         // Iterate left from start
-        for(int i = startIndex; i >= 0; i--)
+        for (int i = startIndex; i >= 0; i--)
         {
+
             if(tokens[i] is CustomToken)
             {
-                ranges[0].Sort();
-                break;
+                allowed = !allowed;
             }
-            ranges[0].Add(i);
+
+            if (allowed & !(tokens[i] is CustomToken))
+            {
+                ranges[0].Add(i);
+            }
         }
 
+        allowed = true;
+
+        // Iterate right from start
         for (int i = startIndex; i < tokens.Count; i++)
         {
+
             if(tokens[i] is CustomToken)
             {
-                break;
+                allowed = !allowed;
             }
-            ranges[0].Add(i);
+
+            if (allowed & !(tokens[i] is CustomToken))
+            {
+                ranges[0].Add(i);
+            }
         }
 
         return ranges;

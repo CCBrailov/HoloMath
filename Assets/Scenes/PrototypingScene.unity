@@ -274,7 +274,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9009129328551064535, guid: 7cf06fc4494d07e4ea03977fa7b8a9da, type: 3}
       propertyPath: expressionString
-      value: 3x + 12
+      value: 3x + 12 * 2 + 5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7cf06fc4494d07e4ea03977fa7b8a9da, type: 3}

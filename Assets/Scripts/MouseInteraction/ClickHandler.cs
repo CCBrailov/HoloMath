@@ -9,6 +9,8 @@ public class ClickHandler : MonoBehaviour
     private RaycastHit raycastHit;
 
     private bool holdingToken = false;
+    private bool hovering = false;
+
     private ExpressionController sourceExpressionController = null;
     private TokenController sourceTokenController = null;
     private Token sourceToken = null;
@@ -25,6 +27,7 @@ public class ClickHandler : MonoBehaviour
     {
         // Get whatever Token Controller the mouse is hovering on
         TokenController mouseTokenController = GetTokenFromMouse();
+        hovering = mouseTokenController != null;
 
         // Middle Mouse Button
         // Expand and simplify (only one should be possible)
@@ -43,37 +46,44 @@ public class ClickHandler : MonoBehaviour
 
         if (Input.GetMouseButtonDown(0))
         {
-            // If the Token managed by selected TokenController is not a term, immediately exit
-            if (!(mouseTokenController.token is Term))
+            if(!hovering)
             {
                 return;
             }
 
-            sourceToken = mouseTokenController.token; // Get the Token for selected TokenController
+            // Only do if selected Token is a Term
+            if (mouseTokenController.token is Term)
+            {
+                sourceToken = mouseTokenController.token; // Get the Token for selected TokenController
 
-            sourceExpressionController = mouseTokenController.expressionController; // Get the ExpressionController for selected TokenController
-            int index = sourceExpressionController.expression.tokens.IndexOf(sourceToken); // Get the index of the token in its Expression
+                sourceExpressionController = mouseTokenController.expressionController; // Get the ExpressionController for selected TokenController
+                int index = sourceExpressionController.expression.tokens.IndexOf(sourceToken); // Get the index of the token in its Expression
 
-            //sourceExpressionController.AddParenthesesFromIndex(index); // Add parenthesis Tokens to Expression, starting from selected Token
-            //Debug.Log("Adding parentheses from position " + index);
+                //sourceExpressionController.AddParenthesesFromIndex(index); // Add parenthesis Tokens to Expression, starting from selected Token
+                //Debug.Log("Adding parentheses from position " + index);
 
-            sourceExpressionController.expression.AddParentheses();
+                sourceExpressionController.expression.AddParentheses();
 
-            sourceExpressionController.BuildTokenControllers(); // Rebuild TokenControllers (NOTE: This destroys the original selected TokenController)
-            
-            index = sourceExpressionController.expression.tokens.IndexOf(sourceToken);         // Retrieve new version of original selected TokenController by
-            sourceTokenController = sourceExpressionController.tokenControllers[index];        //       referencing new index of the Token in Expression (after adding parentheses)
+                sourceExpressionController.BuildTokenControllers(); // Rebuild TokenControllers (NOTE: This destroys the original selected TokenController)
 
-            heldTokenController = Instantiate(                                                 // Instantiate heldTokenController...
-                sourceTokenController,                                                         //       ...as a copy of the original selected TokenController,
-                sourceTokenController.transform.position,                                      //          at the position of the original,
-                Quaternion.identity,                                                           //          with the rotation of the original,
-                sourceTokenController.transform.parent);                                       //          as a child of the same GameObject as the ExpressionController.
-            heldTokenController.token = sourceTokenController.token;
-            heldTokenController.boxCollider.enabled = false;
+                index = sourceExpressionController.expression.tokens.IndexOf(sourceToken);         // Retrieve new version of original selected TokenController by
+                sourceTokenController = sourceExpressionController.tokenControllers[index];        //       referencing new index of the Token in Expression (after adding parentheses)
 
-            sourceTokenController.Hide();                                                      // Hide the original TokenController
-            holdingToken = true;
+                heldTokenController = Instantiate(                                                 // Instantiate heldTokenController...
+                    sourceTokenController,                                                         //       ...as a copy of the original selected TokenController,
+                    sourceTokenController.transform.position,                                      //          at the position of the original,
+                    Quaternion.identity,                                                           //          with the rotation of the original,
+                    sourceTokenController.transform.parent);                                       //          as a child of the same GameObject as the ExpressionController.
+                heldTokenController.token = sourceTokenController.token;
+                heldTokenController.boxCollider.enabled = false;
+
+                sourceTokenController.Hide();                                                      // Hide the original TokenController
+                holdingToken = true;
+            }
+            else
+            {
+                return;
+            }
         }
 
         if (Input.GetMouseButton(0))
@@ -101,15 +111,18 @@ public class ClickHandler : MonoBehaviour
 
         if (Input.GetMouseButtonUp(0))
         {
-            //OnDrop();
-            if(mouseTokenController is TokenController)
+            if (holdingToken)
             {
-                sourceExpressionController.expression.SwapTokens(sourceToken, mouseTokenController.token);
+
+                if (mouseTokenController is TokenController)
+                {
+                    sourceExpressionController.expression.SwapTokens(sourceToken, mouseTokenController.token);
+                }
+                sourceExpressionController.expression.RemoveParentheses(); // Remove added parentheses from equation
+                sourceExpressionController.BuildTokenControllers(); // Rebuild controllers (also reveals hidden tokens)
+                Destroy(heldTokenController.gameObject); // Destroy the dragged token
+                ClearDragVars(); 
             }
-            sourceExpressionController.expression.RemoveParentheses(); // Remove added parentheses from equation
-            sourceExpressionController.BuildTokenControllers(); // Rebuild controllers (also reveals hidden tokens)
-            Destroy(heldTokenController.gameObject); // Destroy the dragged token
-            ClearDragVars();
         }
 
     }
