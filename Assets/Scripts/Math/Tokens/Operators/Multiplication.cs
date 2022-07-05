@@ -14,32 +14,30 @@ public class Multiplication : Operator
     {
         LoadOperandTokens();
 
-        if(!(leftToken is Term) || !(rightToken is Term))
+        if (leftToken is Term && rightToken is Term)
         {
-            return;
+            Term leftTerm = (Term)leftToken;
+            Term rightTerm = (Term)rightToken;
+
+            Token newToken;
+
+            if (leftTerm.hasKnownValue && rightTerm.hasKnownValue)
+            {
+                float coeff = leftTerm.coeff * rightTerm.coeff;
+                newToken = new Term(expression, coeff);
+            }
+            else
+            {
+                float coeff = leftTerm.coeff * rightTerm.coeff;
+                string variable = leftTerm.variable + rightTerm.variable;
+                newToken = new Term(expression, coeff, variable);
+            }
+
+            int index = expression.tokens.IndexOf(this.leftToken);
+            expression.tokens.Remove(leftToken);
+            expression.tokens.Remove(this);
+            expression.tokens.Remove(rightToken);
+            expression.tokens.Insert(index, newToken);
         }
-
-        Term leftTerm = (Term)leftToken;
-        Term rightTerm = (Term)rightToken;
-
-        Token newToken;
-
-        if(leftTerm.hasKnownValue & rightTerm.hasKnownValue)
-        {
-            float coeff = leftTerm.coeff * rightTerm.coeff;
-            newToken = new Term(expression, coeff);
-        }
-        else
-        {
-            float coeff = leftTerm.coeff * rightTerm.coeff;
-            string variable = leftTerm.variable + rightTerm.variable;
-            newToken = new Term(expression, coeff, variable);
-        }
-
-        int index = expression.tokens.IndexOf(this.leftToken);
-        expression.tokens.Remove(leftToken);
-        expression.tokens.Remove(this);
-        expression.tokens.Remove(rightToken);
-        expression.tokens.Insert(index, newToken);
     }
 }

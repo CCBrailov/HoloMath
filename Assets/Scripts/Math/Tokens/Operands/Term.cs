@@ -2,9 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Term : Token
+public class Term : Operand
 {
-
     public float coeff = 1;
     public string variable = "";
 
@@ -18,7 +17,6 @@ public class Term : Token
         expression = ex;
         coeff = f;
         SetKnownValue(f);
-        //displayString = i.ToString();
         BuildDisplayString();
         simple = true;
     }
@@ -27,7 +25,6 @@ public class Term : Token
     {
         expression = ex;
         variable = v;
-        //displayString = v.ToString();
         BuildDisplayString();
         simple = true;
     }
@@ -37,7 +34,6 @@ public class Term : Token
         expression = ex;
         coeff = f;
         variable = v;
-        //displayString = i.ToString() + v.ToString();
         BuildDisplayString();
         simple = false;
     }
@@ -78,12 +74,7 @@ public class Term : Token
         {
             newTokens = FactorizeToken();
         }
-        int index = expression.tokens.IndexOf(this);
-        expression.tokens.Remove(this);
-        foreach (Token t in newTokens)
-        {
-            expression.tokens.Insert(index + newTokens.IndexOf(t), t);
-        }
+        Replace(newTokens);
     }
 
     protected override void OnSimplify()
@@ -115,8 +106,7 @@ public class Term : Token
 
         return newTokens;
     }
-
-    protected void ReplaceTokens(List<Token> newTokens)
+    protected void Replace(List<Token> newTokens)
     {
         int index = expression.tokens.IndexOf(this);
         expression.tokens.Remove(this);
@@ -127,7 +117,7 @@ public class Term : Token
     }
     // Takes in integer, returns factorized integer as list of floats
     // Source: https://www.geeksforgeeks.org/print-all-prime-factors-of-a-given-number/
-    private List<float> FactorizeInteger(int n)
+    protected List<float> FactorizeInteger(int n)
     {
         List<float> factors = new List<float>();
 

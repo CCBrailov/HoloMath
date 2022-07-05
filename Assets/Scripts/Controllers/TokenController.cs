@@ -5,42 +5,68 @@ using TMPro;
 
 public class TokenController : MonoBehaviour
 {
+    #region Control
     public Token token;
-    public TextMeshPro textMesh;
     public ExpressionController expressionController;
     public BoxCollider boxCollider;
     public CapsuleCollider leftHandleCollider;
     public CapsuleCollider rightHandleCollider;
 
-    public bool visible = true;
+    public enum gfxTypes { FlatText, SolidText }
+    public gfxTypes gfxType;
 
-    [ContextMenu("Expand")]
     public void Expand()
     {
         token.Expand();
         expressionController.BuildTokenControllers();
         Destroy(gameObject);
     }
-
-    [ContextMenu("Simplify")]
     public void Simplify()
     {
         token.Simplify();
         expressionController.BuildTokenControllers();
     }
+    protected void ResizeColliders()
+    {
+        boxCollider.size = gfxBounds.size + new Vector3(0, 0, 1);
+        leftHandleCollider.center = new(-gfxBounds.extents.x, 0, 0);
+        rightHandleCollider.center = new(gfxBounds.extents.x, 0, 0);
+        leftHandleCollider.height = gfxBounds.size.y;
+        rightHandleCollider.height = gfxBounds.size.y;
+    }
+    #endregion
 
+    #region Unity
+    void Awake()
+    {
+        
+    }
+    void Start()
+    {
+        RefreshGFXBounds();
+        Draw();
+    }
+    void Update()
+    {
+        RefreshGFXBounds();
+        Draw();
+        ResizeColliders();
+        gameObject.name = token.displayString;
+    }
+    #endregion
+
+    #region Graphics
+    public TextMeshPro textMesh;
+    public Bounds gfxBounds;
+    public bool visible = true;
     public void Hide()
     {
-        //token.Hide();
         visible = false;
     }
-
     public void Show()
     {
-        //token.Show();
         visible = true;
     }
-
     public void Draw()
     {
         if (visible)
@@ -51,23 +77,10 @@ public class TokenController : MonoBehaviour
         {
             textMesh.SetText("_");
         }
-
     }
-
-    void Start()
+    protected void RefreshGFXBounds()
     {
-        Draw();
+        gfxBounds = textMesh.bounds;
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        Draw();
-        boxCollider.size = new Vector3(textMesh.bounds.size.x, textMesh.bounds.size.y, 1);
-        leftHandleCollider.center = new(-textMesh.bounds.extents.x, 0, 0);
-        rightHandleCollider.center = new(textMesh.bounds.extents.x, 0, 0);
-        leftHandleCollider.height = textMesh.bounds.size.y;
-        rightHandleCollider.height = textMesh.bounds.size.y;
-        gameObject.name = token.displayString;
-    }
+    #endregion
 }

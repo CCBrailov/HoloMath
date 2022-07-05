@@ -220,11 +220,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f0b367d28dd33740b5205e7f37c786e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  textMesh: {fileID: 9001818576320689823}
   expressionController: {fileID: 0}
   boxCollider: {fileID: 1179853828529024536}
   leftHandleCollider: {fileID: 7077778414625486004}
   rightHandleCollider: {fileID: 4204174977384450019}
+  gfxType: 0
+  textMesh: {fileID: 9001818576320689823}
+  gfxBounds:
+    m_Center: {x: 0, y: 0, z: 0}
+    m_Extent: {x: 0, y: 0, z: 0}
   visible: 1
 --- !u!65 &1179853828529024536
 BoxCollider:
