@@ -35,6 +35,29 @@ public class Expression
 
         ranges.Add(new List<int>());
 
+        // If the token is enclosed in parentheses
+        if (IsEnclosed(t))
+        {
+            //Start from the token, iterate left until you find starting parenthesis
+            for (int i = tokens.IndexOf(t); i >= 0; i--)
+            {
+                if (tokens[i].displayString.Equals("("))
+                {
+                    // Iterate right until you find close parenthesis, adding each index to the ranges list
+                    for(int j = i + 1; j < tokens.Count; j++)
+                    {
+                        if (tokens[j].displayString.Equals(")"))
+                        {
+                            break;
+                        }
+                        ranges[0].Add(j);
+                    }
+                    break;
+                }
+            }
+            return ranges;
+        }
+
         bool allowed = true;
 
         // Iterate left from start
@@ -70,6 +93,22 @@ public class Expression
         }
 
         return ranges;
+    }
+
+    private bool IsEnclosed(Token t)
+    {
+        for(int i = tokens.IndexOf(t); i >= 0; i--)
+        {
+            if (tokens[i].displayString.Equals("("))
+            {
+                return true;
+            }
+            if (tokens[i].displayString.Equals(")"))
+            {
+                return false;
+            }
+        }
+        return false;
     }
 
 
@@ -159,6 +198,27 @@ public class Expression
         tokens[index2] = token1;
     }
 
+    public void MoveToken(Token token, Token target)
+    {
+        if (!(token is Term & target is Operator))
+        {
+            return;
+        }
+
+        int tokenIndex = tokens.IndexOf(token);
+        int targetIndex = tokens.IndexOf(target);
+
+        Token operatorToMove;
+
+        if (tokenIndex == 0)
+        {
+            operatorToMove = null;
+        }
+        else
+        {
+            operatorToMove = tokens[tokenIndex - 1];
+        }
+    }
 
     //-----Test Expressions------------------------------------
 

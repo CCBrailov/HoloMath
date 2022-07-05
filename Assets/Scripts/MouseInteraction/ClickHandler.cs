@@ -113,7 +113,6 @@ public class ClickHandler : MonoBehaviour
         {
             if (holdingToken)
             {
-
                 if (mouseTokenController is TokenController)
                 {
                     sourceExpressionController.expression.SwapTokens(sourceToken, mouseTokenController.token);
@@ -134,6 +133,7 @@ public class ClickHandler : MonoBehaviour
         if (Physics.Raycast(ray, out raycastHit))
         {
             token = raycastHit.collider.gameObject.GetComponent<TokenController>();
+            Debug.Log(raycastHit.collider.ToString());
         }
         return token;
     }
@@ -157,13 +157,5 @@ public class ClickHandler : MonoBehaviour
         sourceTokenController = null;
         sourceToken = null;
         heldTokenController = null;
-    }
-
-    private void OnDrop()
-    {
-        sourceExpressionController.expression.RemoveParentheses(); // Remove added parentheses from equation
-        sourceExpressionController.BuildTokenControllers(); // Rebuild controllers (also reveals hidden tokens)
-        Destroy(heldTokenController.gameObject); // Destroy the dragged token
-        ClearDragVars();
     }
 }

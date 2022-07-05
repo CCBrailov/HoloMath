@@ -47,7 +47,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tokenControllers: []
   spacing: 0.3
-  collider2D: {fileID: 2735225921323060815}
+  expressionString: 
   tokenPrefab: {fileID: 4412235998811278983, guid: 065be3c06640d8641b044659984e7d22, type: 3}
 --- !u!61 &2735225921323060815
 BoxCollider2D:
