@@ -15,6 +15,7 @@ public class ExpressionController : MonoBehaviour
     public void BuildTokenControllers()
     {
         DestroyTokenControllers();
+        Debug.Log("Building Token Controllers");
         foreach (Token t in expression.tokens)
         {
             GameObject tokenObject = Instantiate(tokenPrefab, transform.position, Quaternion.identity, transform);
@@ -52,34 +53,9 @@ public class ExpressionController : MonoBehaviour
         }
     }
 
-    protected void PositionTokenControllers(int center)
-    {
-        float expressionWidth = 0;
-
-        foreach (TokenController t in tokenControllers)
-        {
-            expressionWidth += t.textMesh.bounds.size.x + spacing * 2;
-        }
-
-        float tokenCenter = 0 - (expressionWidth / 2);
-        float thisTokenExtent;
-        float previousTokenExtent = 0;
-
-        foreach (TokenController t in tokenControllers)
-        {
-            thisTokenExtent = t.textMesh.bounds.extents.x + spacing; // Half of this token's width
-            tokenCenter += thisTokenExtent + previousTokenExtent;
-            Vector3 position = new(
-                gameObject.transform.position.x + tokenCenter,
-                gameObject.transform.position.y,
-                gameObject.transform.position.z);
-            t.gameObject.transform.position = position;
-            previousTokenExtent = t.textMesh.bounds.extents.x + spacing;
-        }
-    }
-
     protected void DestroyTokenControllers()
     {
+        Debug.Log("Destroying Token Controllers");
         foreach (TokenController t in tokenControllers)
         {
             Destroy(t.gameObject);
@@ -87,20 +63,52 @@ public class ExpressionController : MonoBehaviour
         tokenControllers.Clear();
     }
 
-    // Start is called before the first frame update
-    void Start()
+    public void BuildTokenControllersFrom(TokenController tc, Vector3 pos)
     {
-        //expression = new Expression(this, ParseExpression());
-        expression = new Expression(this);
-        tokenControllers = new List<TokenController>();
-        BuildTokenControllers();
+        int index = tokenControllers.IndexOf(tc);
+        DestroyTokenControllers();
+
+        foreach (Token t in expression.tokens)
+        {
+            GameObject tokenObject = Instantiate(tokenPrefab, transform.position, Quaternion.identity, transform);
+            TokenController controller = tokenObject.GetComponent<TokenController>();
+            controller.token = t;
+            controller.expressionController = this;
+            tokenControllers.Add(controller);
+        }
+
+        float tokenCenter = pos.x;
+        float thisTokenExtent;
+        float previousTokenExtent = 0;
+
+        for (int i = index - 1; i >= 0; i--)
+        {
+            thisTokenExtent = tokenControllers[i].gfxBounds.extents.x + spacing;
+            tokenCenter -= thisTokenExtent + previousTokenExtent;
+            Vector3 position = new(
+                pos.x + tokenCenter,
+                pos.y,
+                pos.z);
+            tokenControllers[i].gameObject.transform.position = position;
+            previousTokenExtent = tokenControllers[i].gfxBounds.extents.x + spacing;
+        }
     }
 
-    // Update is called once per frame
+    #region Unity
+    void Awake()
+    {
+        expression = new Expression(this);
+        tokenControllers = new();
+    }
+    void Start()
+    {
+        BuildTokenControllers();
+    }
     void Update()
     {
         PositionTokenControllers();
     }
+    #endregion
 
     protected List<Token> ParseExpression()
     {

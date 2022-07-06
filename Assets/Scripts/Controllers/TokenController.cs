@@ -28,11 +28,7 @@ public class TokenController : MonoBehaviour
     }
     protected void ResizeColliders()
     {
-        boxCollider.size = gfxBounds.size + new Vector3(0, 0, 1);
-        leftHandleCollider.center = new(-gfxBounds.extents.x, 0, 0);
-        rightHandleCollider.center = new(gfxBounds.extents.x, 0, 0);
-        leftHandleCollider.height = gfxBounds.size.y;
-        rightHandleCollider.height = gfxBounds.size.y;
+        boxCollider.size = gfxBounds.size + new Vector3(0, 0, 0.02f);
     }
     #endregion
 
@@ -51,7 +47,7 @@ public class TokenController : MonoBehaviour
         RefreshGFXBounds();
         Draw();
         ResizeColliders();
-        gameObject.name = token.displayString;
+        gameObject.name = token.symbolString;
     }
     #endregion
 
@@ -71,7 +67,7 @@ public class TokenController : MonoBehaviour
     {
         if (visible)
         {
-            textMesh.SetText(token.displayString);
+            textMesh.SetText(token.symbolString);
         }
         else
         {

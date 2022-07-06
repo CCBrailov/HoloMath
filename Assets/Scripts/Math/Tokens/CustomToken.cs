@@ -7,6 +7,6 @@ public class CustomToken : Token
     public CustomToken(Expression ex, string s)
     {
         expression = ex;
-        displayString = s;
+        symbolString = s;
     }
 }

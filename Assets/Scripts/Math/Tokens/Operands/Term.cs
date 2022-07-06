@@ -40,18 +40,18 @@ public class Term : Operand
 
     public void BuildDisplayString()
     {
-        displayString = "";
+        symbolString = "";
         if(variable.Equals(""))
         {
-            displayString = coeff.ToString();
+            symbolString = coeff.ToString();
         } 
         else if(coeff == 1) 
         {
-            displayString = variable.ToString();
+            symbolString = variable.ToString();
         } 
         else
         {
-            displayString = coeff.ToString() + variable.ToString();
+            symbolString = coeff.ToString() + variable.ToString();
         }
     }
 

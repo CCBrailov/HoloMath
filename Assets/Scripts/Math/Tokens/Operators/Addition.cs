@@ -6,7 +6,7 @@ public class Addition : Operator
 {
     public Addition(Expression ex)
     {
-        displayString = "+";
+        symbolString = "+";
         expression = ex;
     }
 

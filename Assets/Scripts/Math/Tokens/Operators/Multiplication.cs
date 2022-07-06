@@ -6,7 +6,7 @@ public class Multiplication : Operator
 {
     public Multiplication(Expression ex)
     {
-        displayString = "*";
+        symbolString = "*";
         expression = ex;
     }
 

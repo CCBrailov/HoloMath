@@ -1,11 +1,6 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
 public class Token
 {
-    public string displayString;
+    public string symbolString;
     public Expression expression;
     public bool visible = true;
 

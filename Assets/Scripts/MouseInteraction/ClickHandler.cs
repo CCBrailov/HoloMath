@@ -59,12 +59,10 @@ public class ClickHandler : MonoBehaviour
                 sourceExpressionController = mouseTokenController.expressionController; // Get the ExpressionController for selected TokenController
                 int index = sourceExpressionController.expression.tokens.IndexOf(sourceToken); // Get the index of the token in its Expression
 
-                //sourceExpressionController.AddParenthesesFromIndex(index); // Add parenthesis Tokens to Expression, starting from selected Token
-                //Debug.Log("Adding parentheses from position " + index);
+                Vector3 pos = sourceExpressionController.tokenControllers[index].transform.position;
 
                 sourceExpressionController.expression.AddParentheses();
-
-                sourceExpressionController.BuildTokenControllers(); // Rebuild TokenControllers (NOTE: This destroys the original selected TokenController)
+                sourceExpressionController.BuildTokenControllersFrom(sourceExpressionController.tokenControllers[index], pos); // Rebuild TokenControllers (NOTE: This destroys the original selected TokenController)
 
                 index = sourceExpressionController.expression.tokens.IndexOf(sourceToken);         // Retrieve new version of original selected TokenController by
                 sourceTokenController = sourceExpressionController.tokenControllers[index];        //       referencing new index of the Token in Expression (after adding parentheses)
@@ -133,7 +131,6 @@ public class ClickHandler : MonoBehaviour
         if (Physics.Raycast(ray, out raycastHit))
         {
             token = raycastHit.collider.gameObject.GetComponent<TokenController>();
-            Debug.Log(raycastHit.collider.ToString());
         }
         return token;
     }

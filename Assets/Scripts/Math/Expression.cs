@@ -41,12 +41,12 @@ public class Expression
             //Start from the token, iterate left until you find starting parenthesis
             for (int i = tokens.IndexOf(t); i >= 0; i--)
             {
-                if (tokens[i].displayString.Equals("("))
+                if (tokens[i].symbolString.Equals("("))
                 {
                     // Iterate right until you find close parenthesis, adding each index to the ranges list
                     for(int j = i + 1; j < tokens.Count; j++)
                     {
-                        if (tokens[j].displayString.Equals(")"))
+                        if (tokens[j].symbolString.Equals(")"))
                         {
                             break;
                         }
@@ -99,11 +99,11 @@ public class Expression
     {
         for(int i = tokens.IndexOf(t); i >= 0; i--)
         {
-            if (tokens[i].displayString.Equals("("))
+            if (tokens[i].symbolString.Equals("("))
             {
                 return true;
             }
-            if (tokens[i].displayString.Equals(")"))
+            if (tokens[i].symbolString.Equals(")"))
             {
                 return false;
             }
