@@ -132,11 +132,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 73552816}
+  - component: {fileID: 73552821}
   - component: {fileID: 73552820}
   - component: {fileID: 73552819}
   - component: {fileID: 73552818}
   - component: {fileID: 73552817}
-  - component: {fileID: 73552821}
+  - component: {fileID: 73552822}
   m_Layer: 0
   m_Name: Right Controller
   m_TagString: Untagged
@@ -252,6 +253,37 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 903f6e4f2070aac44a43cc72ddcedb29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  expressionController: {fileID: 2009095070}
+--- !u!114 &73552822
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 73552815}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Actions: {fileID: 0}
+  m_NotificationBehavior: 0
+  m_UIInputModule: {fileID: 0}
+  m_DeviceLostEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_DeviceRegainedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ControlsChangedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ActionEvents: []
+  m_NeverAutoSwitchControlSchemes: 0
+  m_DefaultControlScheme: 
+  m_DefaultActionMap: 
+  m_SplitScreenIndex: -1
+  m_Camera: {fileID: 0}
 --- !u!1 &353497176
 GameObject:
   m_ObjectHideFlags: 0
@@ -726,3 +758,14 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1488766691}
   m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &2009095070 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 9009129328551064535, guid: 7cf06fc4494d07e4ea03977fa7b8a9da, type: 3}
+  m_PrefabInstance: {fileID: 910496314}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 353c06d3ca0b4aa43878371359a2092b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
