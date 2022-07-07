@@ -99,6 +99,7 @@ public class ExpressionController : MonoBehaviour
         expression.SwapTokens(tc1.token, tc2.token);
         int ind1 = tokenControllers.IndexOf(tc1);
         int ind2 = tokenControllers.IndexOf(tc2);
+        Debug.Log("Swapping " + ind1 + " and " + ind2);
         tokenControllers[ind1] = tc2;
         tokenControllers[ind2] = tc1;
     }

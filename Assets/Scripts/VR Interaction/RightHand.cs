@@ -121,7 +121,7 @@ public class RightHand : MonoBehaviour
                     TokenController heldController = heldElement.GetComponent<TokenController>();
                     if (hovering && heldController.token is Term && hoveredElements[0].token is Term)
                     {
-                        expressionController.SwapTokenControllers(heldController, hoveredElements[0]);
+                        expressionController.SwapTokenControllers(originalController, hoveredElements[0]);
                     }
                     Destroy(heldElement);
                     holdingElement = false;
