@@ -253,6 +253,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   expressionController: {fileID: 2009095070}
+  gripping: 0
+  pullDistance: 0
+  betweenHandsDistance: 0
 --- !u!1 &353497176
 GameObject:
   m_ObjectHideFlags: 0
@@ -398,11 +401,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5064043924944630579, guid: 7cf06fc4494d07e4ea03977fa7b8a9da, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.56
+      value: 1.5
       objectReference: {fileID: 0}
     - target: {fileID: 5064043924944630579, guid: 7cf06fc4494d07e4ea03977fa7b8a9da, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -9.43
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5064043924944630579, guid: 7cf06fc4494d07e4ea03977fa7b8a9da, type: 3}
       propertyPath: m_LocalRotation.w
@@ -603,7 +606,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1464836423}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -10}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -620,6 +623,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1488766692}
+  - component: {fileID: 1488766697}
   - component: {fileID: 1488766696}
   - component: {fileID: 1488766695}
   - component: {fileID: 1488766694}
@@ -727,6 +731,21 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1488766691}
   m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &1488766697
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1488766691}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e2890ba1b841c844bd348eecff3670a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  expressionController: {fileID: 2009095070}
+  hovering: 0
+  hoveredElements: []
 --- !u!114 &2009095070 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 9009129328551064535, guid: 7cf06fc4494d07e4ea03977fa7b8a9da, type: 3}

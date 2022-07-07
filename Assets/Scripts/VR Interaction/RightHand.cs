@@ -12,11 +12,17 @@ public class RightHand : MonoBehaviour
 
     protected bool holdingElement = false;
     protected GameObject heldElement;
+    protected bool selectedElement = false;
     protected GameObject originalElement;
 
     protected InputDevice? device;
 
-    protected bool gripping = false;
+    protected LeftHand leftHand;
+
+    public bool gripping = false;
+
+    protected Vector3? pullStart = null;
+    public float pullDistance = 0;
 
     void Awake()
     {
@@ -25,7 +31,7 @@ public class RightHand : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
+        leftHand = FindObjectsOfType<LeftHand>()[0];
     }
 
     // Update is called once per frame
@@ -35,7 +41,7 @@ public class RightHand : MonoBehaviour
 
         if (device == null)
         {
-            Debug.Log("Fetching Controller");
+            Debug.Log("Fetching Right Controller");
             List<InputDevice> devices = new();
             InputDevices.GetDevicesWithCharacteristics(InputDeviceCharacteristics.Right, devices);
             if(devices.Count != 0)
@@ -50,14 +56,10 @@ public class RightHand : MonoBehaviour
             heldElement.transform.position = gameObject.transform.position;
         }
 
-        bool held = heldElement != null;
-
         ColorHoveredElements();
-        if (hovering)
-        {
-            OnGrip();
-        }
 
+        OnGrip();
+        OnHold();
         OnRelease();
     }
     private void OnCollisionEnter(Collision collision)
@@ -68,18 +70,27 @@ public class RightHand : MonoBehaviour
     void OnCollisionExit(Collision collision)
     {
         TokenController tc = collision.gameObject.GetComponent<TokenController>();
-        tc.textMesh.outlineWidth = 0;
-        tc.textMesh.color = new Color(255, 255, 255);
+        //tc.textMesh.outlineWidth = 0;
+        //tc.textMesh.color = new Color(255, 255, 255);
         hoveredElements.Remove(tc);
     }
     void ColorHoveredElements()
     {
+        foreach(TokenController t in expressionController.tokenControllers)
+        {
+            t.textMesh.outlineWidth = 0;
+            t.textMesh.color = new(255, 255, 255);
+        }
         for (int i = 0; i < hoveredElements.Count; i++)
         {
-            if (i == 0)
+            if (i == 0 && leftHand.hovering && hoveredElements[i] == leftHand.hoveredElements[0])
+            {
+                hoveredElements[i].textMesh.outlineWidth = 0.1f;
+            }
+
+            if(i == 0)
             {
                 hoveredElements[i].textMesh.color = new(0, 100, 0);
-                hoveredElements[i].textMesh.outlineWidth = 0.1f;
             }
             else
             {
@@ -95,14 +106,42 @@ public class RightHand : MonoBehaviour
             if (!gripping)
             {
                 gripping = true;
-                originalElement = hoveredElements[0].gameObject;
-                heldElement = Instantiate(expressionController.tokenPrefab, gameObject.transform.position, hoveredElements[0].transform.rotation, gameObject.transform);
+                if (hovering)
+                {
+                    originalElement = hoveredElements[0].gameObject;
+                    pullStart = originalElement.transform.position;
+
+                    //heldElement = Instantiate(expressionController.tokenPrefab, gameObject.transform.position, hoveredElements[0].transform.rotation, gameObject.transform);
+                    //TokenController heldController = heldElement.GetComponent<TokenController>();
+                    //heldController.token = hoveredElements[0].token;
+                    //heldElement.transform.localScale = new(20, 20, 20);
+                    //heldElement.GetComponent<BoxCollider>().enabled = false;
+                    //heldController.textMesh.color = new(255, 255, 255);
+                    //expressionController.AddParentheses();
+                    //holdingElement = true;
+                }
+            }
+        }
+    }
+
+    void OnHold()
+    {
+        if (gripping)
+        {
+            if (pullDistance > 0.15f && !holdingElement)
+            {
+                heldElement = Instantiate(expressionController.tokenPrefab, gameObject.transform.position, originalElement.transform.rotation, gameObject.transform);
                 TokenController heldController = heldElement.GetComponent<TokenController>();
-                heldController.token = hoveredElements[0].token;
+                heldController.token = originalElement.GetComponent<TokenController>().token;
                 heldElement.transform.localScale = new(20, 20, 20);
                 heldElement.GetComponent<BoxCollider>().enabled = false;
                 heldController.textMesh.color = new(255, 255, 255);
+                expressionController.AddParentheses();
                 holdingElement = true;
+            }
+            if (pullStart != null)
+            {
+                pullDistance = Vector3.Distance(pullStart.Value, gameObject.transform.position);
             }
         }
     }
@@ -123,9 +162,12 @@ public class RightHand : MonoBehaviour
                     {
                         expressionController.SwapTokenControllers(originalController, hoveredElements[0]);
                     }
+                    expressionController.RemoveParentheses();
                     Destroy(heldElement);
                     holdingElement = false;
                 }
+                pullDistance = 0;
+                pullStart = null;
             }
         }
     }

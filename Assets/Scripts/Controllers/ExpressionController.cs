@@ -104,6 +104,40 @@ public class ExpressionController : MonoBehaviour
         tokenControllers[ind2] = tc1;
     }
 
+    public void AddParentheses()
+    {
+        expression.AddParentheses();
+        foreach(Token t in expression.tokens)
+        {
+            if(t is CustomToken)
+            {
+                GameObject tokenObject = Instantiate(tokenPrefab, transform.position, Quaternion.identity, transform);
+                TokenController controller = tokenObject.GetComponent<TokenController>();
+                controller.token = t;
+                controller.expressionController = this;
+                tokenControllers.Insert(expression.tokens.IndexOf(t), controller);
+            }
+        }
+    }
+
+    public void RemoveParentheses()
+    {
+        List<TokenController> toRemove = new();
+        foreach (TokenController t in tokenControllers)
+        {
+            if (t.token is CustomToken)
+            {
+                toRemove.Add(t);
+            }
+        }
+        foreach(TokenController t in toRemove)
+        {
+            tokenControllers.Remove(t);
+            Destroy(t.gameObject);
+        }
+        expression.RemoveParentheses();
+    }
+
     #region Unity
     void Awake()
     {
