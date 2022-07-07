@@ -94,6 +94,15 @@ public class ExpressionController : MonoBehaviour
         }
     }
 
+    public void SwapTokenControllers(TokenController tc1, TokenController tc2)
+    {
+        expression.SwapTokens(tc1.token, tc2.token);
+        int ind1 = tokenControllers.IndexOf(tc1);
+        int ind2 = tokenControllers.IndexOf(tc2);
+        tokenControllers[ind1] = tc2;
+        tokenControllers[ind2] = tc1;
+    }
+
     #region Unity
     void Awake()
     {
