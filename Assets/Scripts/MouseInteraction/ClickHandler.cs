@@ -113,9 +113,9 @@ public class ClickHandler : MonoBehaviour
             {
                 if (mouseTokenController is TokenController)
                 {
-                    sourceExpressionController.expression.SwapTokens(sourceToken, mouseTokenController.token);
+                    sourceExpressionController.SwapTokenControllers(sourceTokenController, mouseTokenController);
                 }
-                sourceExpressionController.expression.RemoveParentheses(); // Remove added parentheses from equation
+                sourceExpressionController.RemoveParentheses(); // Remove added parentheses from equation
                 sourceExpressionController.BuildTokenControllers(); // Rebuild controllers (also reveals hidden tokens)
                 Destroy(heldTokenController.gameObject); // Destroy the dragged token
                 ClearDragVars(); 

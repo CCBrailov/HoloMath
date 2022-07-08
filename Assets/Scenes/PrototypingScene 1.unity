@@ -273,6 +273,10 @@ PrefabInstance:
       value: ExpressionObject
       objectReference: {fileID: 0}
     - target: {fileID: 9009129328551064535, guid: 7cf06fc4494d07e4ea03977fa7b8a9da, type: 3}
+      propertyPath: spacing
+      value: 0.02
+      objectReference: {fileID: 0}
+    - target: {fileID: 9009129328551064535, guid: 7cf06fc4494d07e4ea03977fa7b8a9da, type: 3}
       propertyPath: highlightPrefab
       value: 
       objectReference: {fileID: 6663875300398856378, guid: 0efc95eb763ad87489e46f324cba727e, type: 3}
@@ -335,7 +339,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 13
+  orthographic size: 0.5
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -359,7 +363,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: -10}
+  m_LocalPosition: {x: 0, y: 0, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
