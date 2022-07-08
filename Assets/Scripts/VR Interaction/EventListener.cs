@@ -34,7 +34,11 @@ public class EventListener : MonoBehaviour
     protected float stretchDist = 0;
     protected float stretchStart = 0;
 
-    protected List<List<int>> lawfulPlacements;
+    protected List<int> lawfulPlacements;
+    protected List<TokenController> lawfulSwaps;
+
+    public AudioClip pop1;
+    public AudioClip pop2;
 
     void Awake()
     {
@@ -56,6 +60,7 @@ public class EventListener : MonoBehaviour
         }
 
         ColorTokens();
+
         if (dragging)
         {
             dragDist = Vector3.Distance(rightSelect.gameObject.transform.position, rightHand.gameObject.transform.position);
@@ -66,22 +71,35 @@ public class EventListener : MonoBehaviour
                 PickUp(rightSelect);
             }
         }
+
         if (stretching)
         {
             stretchDist = Vector3.Distance(leftHand.gameObject.transform.position, rightHand.gameObject.transform.position);
             debugString = "Stretching " + stretchDist/stretchStart;
-            if (stretchDist / stretchStart > 3)
+            bool operandsAreNeighbors = (Mathf.Abs(exCon.tokenControllers.IndexOf(rightSelect) - exCon.tokenControllers.IndexOf(leftSelect))) == 2;
+            if (stretchDist / stretchStart > 3
+                && rightSelect == leftSelect)
             {
                 rightSelect.Expand();
+                rightHand.GetComponent<AudioSource>().clip = pop2;
+                rightHand.GetComponent<AudioSource>().Play();
                 EndStretch();
             }
+            else if (stretchDist / stretchStart < 0.5 
+                && operandsAreNeighbors)
+            {
+                TokenController op = exCon.tokenControllers[exCon.tokenControllers.IndexOf(rightSelect) - 1];
+                op.Simplify();
+            }
         }
+
         debugText.SetText(debugString);
     }
 
     void ColorTokens()
     {
-        foreach(TokenController tc in exCon.tokenControllers)
+        List<TokenController> controllers = exCon.tokenControllers;
+        foreach (TokenController tc in controllers)
         {
             tc.textMesh.color = new(255, 255, 255);
             tc.textMesh.fontSize = 1;
@@ -102,18 +120,23 @@ public class EventListener : MonoBehaviour
             leftSelect.textMesh.color = new(255, 0, 0);
         }
 
-        foreach(List<int> region in lawfulPlacements)
+        foreach(TokenController tc in exCon.tokenControllers)
         {
-            foreach(int i in region)
+            if (lawfulPlacements.Count > 0 
+                && !lawfulPlacements.Contains(controllers.IndexOf(tc)))
             {
-                exCon.tokenControllers[i].textMesh.alpha = 0.2f;
+                tc.textMesh.alpha = 0.3f;
             }
         }
     }
 
     void PickUp(TokenController tc)
     {
+        rightHand.GetComponent<AudioSource>().clip = pop2;
+        rightHand.GetComponent<AudioSource>().Play();
+
         rightSelect.Hide();
+        exCon.AddParentheses();
         lawfulPlacements = exCon.expression.LawfulPlacements(rightSelect.token);
         
         inHandObject = Instantiate(exCon.tokenPrefab, rightHand.gameObject.transform.position, rightSelect.gameObject.transform.rotation, rightHand.gameObject.transform);
@@ -122,26 +145,33 @@ public class EventListener : MonoBehaviour
         inHand.textMesh.color = new(255, 255, 255);
         inHandObject.transform.localScale = new(20, 20, 20);
         inHandObject.GetComponent<BoxCollider>().enabled = false;
-        exCon.AddParentheses();
         holding = true;
     }
 
     void Drop()
     {
-        lawfulPlacements.Clear();
+        lawfulSwaps = new();
+        foreach(int i in lawfulPlacements)
+        {
+            lawfulSwaps.Add(exCon.tokenControllers[i]);
+        }
 
         if(inHandObject != null)
         {
             Destroy(inHandObject);
+            rightSelect.Show();
         }
 
-        if (rightHand.hovering && (rightSelect.token is Term && rightHand.hoveredElements[0].token is Term))
+        if (rightHand.hovering
+            && rightSelect.token is Operand
+            && rightHand.hoveredElements[0].token is Operand
+            && lawfulSwaps.Contains(rightHand.hoveredElements[0]))
         {
             exCon.SwapTokenControllers(rightSelect, rightHand.hoveredElements[0]);
         }
 
+        lawfulPlacements.Clear();
         exCon.RemoveParentheses();
-        rightSelect.Show();
 
         rightSelect = null;
         inHandObject = null;
@@ -152,6 +182,8 @@ public class EventListener : MonoBehaviour
 
     void StartDrag()
     {
+        rightHand.GetComponent<AudioSource>().clip = pop1;
+        rightHand.GetComponent<AudioSource>().Play();
         leftHand.squeeze.AddListener(LeftSqueeze);
         dragging = true;
     }
@@ -228,7 +260,7 @@ public class EventListener : MonoBehaviour
     void RightSqueeze()
     {
         Debug.Log("[R] Squeeze!");
-        if (rightHand.hovering)
+        if (rightHand.hovering && rightHand.hoveredElements[0].token is Operand)
         {
             rightSelect = rightHand.hoveredElements[0];
             StartDrag();

@@ -89,20 +89,17 @@ public class ClickHandler : MonoBehaviour
             if (holdingToken)
             {
                 heldTokenController.transform.position = mainCamera.ScreenToWorldPoint(Input.mousePosition) + new Vector3(0, 0, 1);
-                List<List<int>> lawfulRegions = sourceExpressionController.expression.LawfulPlacements(sourceToken);
-                foreach(List<int> region in lawfulRegions)
+                List<int> lawfulPlacements = sourceExpressionController.expression.LawfulPlacements(sourceToken);
+                foreach (int i in lawfulPlacements)
                 {
-                    foreach(int i in region)
+                    //Debug.Log(i);
+                    TokenController tc = sourceExpressionController.tokenControllers[i];
+                    Color color = new(100, 0, 0);
+                    if (tc == mouseTokenController)
                     {
-                        //Debug.Log(i);
-                        TokenController tc = sourceExpressionController.tokenControllers[i];
-                        Color color = new(100, 0, 0);
-                        if(tc == mouseTokenController)
-                        {
-                            color.a = 0.4f;
-                        }
-                        sourceExpressionController.tokenControllers[i].textMesh.color = color;
+                        color.a = 0.4f;
                     }
+                    sourceExpressionController.tokenControllers[i].textMesh.color = color;
                 }
             }
         }

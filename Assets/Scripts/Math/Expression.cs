@@ -22,18 +22,16 @@ public class Expression
         tokens = t;
     }
 
-    public List<List<int>> LawfulPlacements(Token t)
+    public List<int> LawfulPlacements(Token t)
     {
         if (!parenthetized)
         {
             AddParentheses();
         }
 
-        List<List<int>> ranges = new();
+        List<int> range = new();
 
         int startIndex = tokens.IndexOf(t);
-
-        ranges.Add(new List<int>());
 
         // If the token is enclosed in parentheses
         if (IsEnclosed(t))
@@ -43,19 +41,19 @@ public class Expression
             {
                 if (tokens[i].symbolString.Equals("("))
                 {
-                    // Iterate right until you find close parenthesis, adding each index to the ranges list
+                    // Iterate right until you find close parenthesis, adding each index to the list
                     for(int j = i + 1; j < tokens.Count; j++)
                     {
                         if (tokens[j].symbolString.Equals(")"))
                         {
                             break;
                         }
-                        ranges[0].Add(j);
+                        range.Add(j);
                     }
                     break;
                 }
             }
-            return ranges;
+            return range;
         }
 
         bool allowed = true;
@@ -71,7 +69,7 @@ public class Expression
 
             if (allowed & !(tokens[i] is CustomToken))
             {
-                ranges[0].Add(i);
+                range.Add(i);
             }
         }
 
@@ -88,11 +86,11 @@ public class Expression
 
             if (allowed & !(tokens[i] is CustomToken))
             {
-                ranges[0].Add(i);
+                range.Add(i);
             }
         }
 
-        return ranges;
+        return range;
     }
 
     private bool IsEnclosed(Token t)
