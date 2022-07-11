@@ -7,7 +7,7 @@ using UnityEngine.Events;
 public class RightHand2 : MonoBehaviour
 {
     protected bool deviceLoaded;
-    protected InputDevice device;
+    public InputDevice device;
 
     public bool hovering;
     public List<TokenController> hoveredElements;
@@ -78,6 +78,7 @@ public class RightHand2 : MonoBehaviour
     {
         TokenController tc = collision.gameObject.GetComponent<TokenController>();
         hoveredElements.Insert(0, tc);
+        device.SendHapticImpulse(0, 1, 0.05f);
     }
     void OnCollisionExit(Collision collision)
     {

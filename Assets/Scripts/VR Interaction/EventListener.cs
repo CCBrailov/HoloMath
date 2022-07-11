@@ -27,6 +27,7 @@ public class EventListener : MonoBehaviour
     
     [SerializeField]
     protected bool dragging = false;
+    protected Vector3 dragStart;
     [SerializeField]
     protected float dragDist = 0;
 
@@ -63,7 +64,11 @@ public class EventListener : MonoBehaviour
 
         if (dragging)
         {
-            dragDist = Vector3.Distance(rightSelect.gameObject.transform.position, rightHand.gameObject.transform.position);
+            dragDist = Vector3.Distance(dragStart, rightHand.gameObject.transform.position);
+            Vector3 halfwayPoint = rightHand.gameObject.transform.position - dragStart;
+            halfwayPoint = new(halfwayPoint.x / 3, halfwayPoint.y / 3, halfwayPoint.z / 4);
+            halfwayPoint += dragStart;
+            rightSelect.transform.position = halfwayPoint;
             debugString = "Dragging " + dragDist;
             if (dragDist > 0.15f)
             {
@@ -77,7 +82,14 @@ public class EventListener : MonoBehaviour
             stretchDist = Vector3.Distance(leftHand.gameObject.transform.position, rightHand.gameObject.transform.position);
             debugString = "Stretching " + stretchDist/stretchStart;
             bool operandsAreNeighbors = (Mathf.Abs(exCon.tokenControllers.IndexOf(rightSelect) - exCon.tokenControllers.IndexOf(leftSelect))) == 2;
-            if (stretchDist / stretchStart > 3
+            float ratio = stretchDist / stretchStart;
+
+            if(ratio > 1)
+            {
+                rightSelect.textMesh.transform.localScale = new(1 + ((ratio - 1) / 2), 1, 1);
+            }
+
+            if (ratio > 3
                 && rightSelect == leftSelect)
             {
                 rightSelect.Expand();
@@ -90,6 +102,7 @@ public class EventListener : MonoBehaviour
             {
                 TokenController op = exCon.tokenControllers[exCon.tokenControllers.IndexOf(rightSelect) - 1];
                 op.Simplify();
+                EndStretch();
             }
         }
 
@@ -135,6 +148,8 @@ public class EventListener : MonoBehaviour
         rightHand.GetComponent<AudioSource>().clip = pop2;
         rightHand.GetComponent<AudioSource>().Play();
 
+        exCon.overrides.Clear();
+
         rightSelect.Hide();
         exCon.AddParentheses();
         lawfulPlacements = exCon.expression.LawfulPlacements(rightSelect.token);
@@ -146,6 +161,8 @@ public class EventListener : MonoBehaviour
         inHandObject.transform.localScale = new(20, 20, 20);
         inHandObject.GetComponent<BoxCollider>().enabled = false;
         holding = true;
+
+        rightHand.device.SendHapticImpulse(0, 1f, 0.05f);
     }
 
     void Drop()
@@ -172,6 +189,7 @@ public class EventListener : MonoBehaviour
 
         lawfulPlacements.Clear();
         exCon.RemoveParentheses();
+        exCon.overrides.Clear();
 
         rightSelect = null;
         inHandObject = null;
@@ -182,6 +200,8 @@ public class EventListener : MonoBehaviour
 
     void StartDrag()
     {
+        exCon.overrides.Add(rightSelect);
+
         rightHand.GetComponent<AudioSource>().clip = pop1;
         rightHand.GetComponent<AudioSource>().Play();
         leftHand.squeeze.AddListener(LeftSqueeze);
@@ -219,6 +239,7 @@ public class EventListener : MonoBehaviour
         debugString = "End Stretch";
         stretching = false;
         stretchDist = 0;
+        exCon.overrides.Clear();
         ResetListeners();
     }
 
@@ -263,6 +284,7 @@ public class EventListener : MonoBehaviour
         if (rightHand.hovering && rightHand.hoveredElements[0].token is Operand)
         {
             rightSelect = rightHand.hoveredElements[0];
+            dragStart = rightSelect.transform.position;
             StartDrag();
         }
     }

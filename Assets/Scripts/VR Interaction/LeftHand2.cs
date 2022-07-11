@@ -7,7 +7,7 @@ using UnityEngine.Events;
 public class LeftHand2 : MonoBehaviour
 {
     protected bool deviceLoaded;
-    protected InputDevice device;
+    public InputDevice device;
 
     public bool hovering;
     public List<TokenController> hoveredElements;

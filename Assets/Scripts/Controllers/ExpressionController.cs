@@ -6,6 +6,7 @@ public class ExpressionController : MonoBehaviour
 {
     public Expression expression;
     public List<TokenController> tokenControllers;
+    public List<TokenController> overrides;
     public float spacing = 0.3f;
 
     public string expressionString;
@@ -42,14 +43,23 @@ public class ExpressionController : MonoBehaviour
 
         foreach (TokenController t in tokenControllers)
         {
-            thisTokenExtent = t.textMesh.bounds.extents.x + spacing; // Half of this token's width
-            tokenCenter += thisTokenExtent + previousTokenExtent;
-            Vector3 position = new(
-                gameObject.transform.position.x + tokenCenter,
-                gameObject.transform.position.y,
-                gameObject.transform.position.z);
-            t.gameObject.transform.position = position;
-            previousTokenExtent = t.textMesh.bounds.extents.x + spacing;
+            if (overrides.Contains(t))
+            {
+                thisTokenExtent = t.textMesh.bounds.extents.x + spacing;
+                tokenCenter += thisTokenExtent + previousTokenExtent;
+                previousTokenExtent = t.textMesh.bounds.extents.x + spacing;
+            }
+            else
+            {
+                thisTokenExtent = t.textMesh.bounds.extents.x + spacing; // Half of this token's width
+                tokenCenter += thisTokenExtent + previousTokenExtent;
+                Vector3 position = new(
+                    gameObject.transform.position.x + tokenCenter,
+                    gameObject.transform.position.y,
+                    gameObject.transform.position.z);
+                t.gameObject.transform.position = position;
+                previousTokenExtent = t.textMesh.bounds.extents.x + spacing; 
+            }
         }
     }
 
@@ -143,6 +153,7 @@ public class ExpressionController : MonoBehaviour
     {
         expression = new Expression(this);
         tokenControllers = new();
+        overrides = new();
     }
     void Start()
     {
