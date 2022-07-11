@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 
 public class RightHand2 : MonoBehaviour
 {
@@ -71,6 +72,13 @@ public class RightHand2 : MonoBehaviour
         {
             triggerState = false;
             triggerUp.Invoke();
+        }
+
+        device.TryGetFeatureValue(CommonUsages.secondaryButton, out bool secondaryButton);
+        if (secondaryButton)
+        {
+            Scene scene = SceneManager.GetActiveScene();
+            SceneManager.LoadScene(scene.name);
         }
     }
 

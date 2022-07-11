@@ -13,7 +13,7 @@ public class Expression
     public Expression(ExpressionController c)
     {
         controller = c;
-        Test5();
+        Test1();
     }
 
     public Expression(ExpressionController c, List<Token> t)

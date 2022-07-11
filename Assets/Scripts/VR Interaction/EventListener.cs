@@ -240,6 +240,8 @@ public class EventListener : MonoBehaviour
         stretching = false;
         stretchDist = 0;
         exCon.overrides.Clear();
+        rightSelect.textMesh.transform.localScale = new(1, 1, 1);
+        leftSelect = null;
         ResetListeners();
     }
 
